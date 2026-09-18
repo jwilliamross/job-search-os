@@ -22,6 +22,7 @@ applications/TRACKER.md      the pipeline
 .claude/skills/              application, cover-letter, humanizer, job-search, outreach, prompt-showcase
 scripts/voice_check.py       hard/soft AI-tell gate (dashes, not-X-but-Y, stock words, triads, closers...)
 scripts/render_letter.py     letter markdown to PDF with headless Chromium
+scripts/render_resume.py     resume markdown to a one-page PDF (auto-shrinks to fit)
 scripts/humanizer-metrics/   vendored 0-100 scorer (burstiness signal only; see calibration note)
 scripts/search_jobs.py       python-jobspy scraper for LinkedIn / Indeed / Glassdoor
 ```
