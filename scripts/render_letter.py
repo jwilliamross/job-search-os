@@ -28,6 +28,8 @@ body { font-family: 'Bitstream Charter', 'Charter', 'Liberation Serif', Georgia,
 .date, .addr { margin: 0 0 12px 0; white-space: pre-line; }
 .re { font-weight: 700; margin: 0 0 12px 0; }
 p { margin: 0 0 10px 0; text-align: left; }
+a { color: #1a4d8f; text-decoration: underline; text-decoration-thickness: 0.6px; text-underline-offset: 2px; }
+.contact a { color: #1a4d8f; }
 .sign { margin-top: 18px; }
 .appendix { page-break-before: always; }
 .appendix h2 { font-family: 'Liberation Sans', Arial, sans-serif; font-size: 12.5pt;
@@ -38,7 +40,19 @@ p { margin: 0 0 10px 0; text-align: left; }
           margin: 6px 0 12px 0; white-space: pre-wrap; }
 """
 
-def esc(s): return html.escape(s, quote=False)
+URL_RX = re.compile(r"(?<![\w/])((?:https?://)?(?:www\.)?(?:[a-z0-9-]+\.)*(?:linkedin\.com|github\.com|[a-z0-9-]+\.(?:com|ca|io|org|net|energy|ai))(?:/[^\s<>\"')\]]*)?)(?=[\s.,;:)\]]|$)", re.I)
+EMAIL_RX = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+
+def esc(s):
+    """Escape HTML, then turn URLs and emails into links so the PDF carries clickable
+    annotations (LinkedIn, the public repo, email). James's rule, 2026-09-18."""
+    out = html.escape(s, quote=False)
+    out = EMAIL_RX.sub(lambda m: f'<a href="mailto:{m.group(0)}">{m.group(0)}</a>', out)
+    def link(m):
+        u = m.group(1)
+        href = u if u.lower().startswith("http") else "https://" + u
+        return f'<a href="{href}">{u}</a>'
+    return URL_RX.sub(link, out)
 
 def render(md_path, out_path):
     text = open(md_path, encoding="utf-8").read().strip()
