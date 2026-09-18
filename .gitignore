@@ -1,0 +1,9 @@
+.env
+*.key
+profile/network/*.csv
+profile/network/*.zip
+scratch/
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
