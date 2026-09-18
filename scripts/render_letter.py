@@ -50,8 +50,11 @@ def esc(s):
     out = EMAIL_RX.sub(lambda m: f'<a href="mailto:{m.group(0)}">{m.group(0)}</a>', out)
     def link(m):
         u = m.group(1)
+        trail = ""
+        while u and u[-1] in ".,;:)]":  # never swallow sentence punctuation into the link
+            trail = u[-1] + trail; u = u[:-1]
         href = u if u.lower().startswith("http") else "https://" + u
-        return f'<a href="{href}">{u}</a>'
+        return f'<a href="{href}">{u}</a>{trail}'
     return URL_RX.sub(link, out)
 
 def render(md_path, out_path):
